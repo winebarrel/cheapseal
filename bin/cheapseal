@@ -4,3 +4,5 @@
 $LOAD_PATH << File.expand_path('../lib', __dir__)
 
 require 'cheapseal'
+
+Cheapseal::CLI.start(ARGV)

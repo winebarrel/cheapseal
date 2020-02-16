@@ -62,6 +62,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
+    thor (1.0.1)
     unicode-display_width (1.6.1)
 
 PLATFORMS
@@ -74,6 +75,7 @@ DEPENDENCIES
   rake
   rspec
   rubocop
+  thor
 
 BUNDLED WITH
    2.1.4
