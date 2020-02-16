@@ -6,3 +6,4 @@ require 'logger'
 require 'open3'
 
 require 'cheapseal/kube_driver'
+require 'cheapseal/sanitizer'
