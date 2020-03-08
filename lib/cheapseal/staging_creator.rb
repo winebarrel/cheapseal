@@ -2,6 +2,6 @@
 
 module Cheapseal
   class StagingCreator
-    def create(branch:, number:); end
+    def create(branch:, number:, image:); end
   end
 end

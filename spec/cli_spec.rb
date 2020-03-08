@@ -8,9 +8,12 @@ RSpec.describe Cheapseal::CLI do
   describe '#create' do
     specify do
       expect_any_instance_of(Cheapseal::StagingCreator).to receive(:create).with(
-        branch: 'develop/my_branch-1.1', number: '123'
+        branch: 'develop/my_branch-1.1',
+        number: '123',
+        image: 'nginx:master'
       )
-      cli.create('develop/my_branch-1.1', '123')
+
+      cli.create('develop/my_branch-1.1', '123', 'nginx:master')
     end
   end
 end

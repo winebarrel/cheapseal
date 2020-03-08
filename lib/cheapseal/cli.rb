@@ -2,10 +2,10 @@
 
 module Cheapseal
   class CLI < Thor
-    desc 'create BRANCH NUMBER', 'create kube staging'
-    def create(branch, number)
+    desc 'create BRANCH NUMBER IMAGE', 'create kube staging'
+    def create(branch, number, image)
       staging_creator = StagingCreator.new
-      staging_creator.create(branch: branch, number: number)
+      staging_creator.create(branch: branch, number: number, image: image)
     end
   end
 end
