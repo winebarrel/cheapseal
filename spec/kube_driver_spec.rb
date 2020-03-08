@@ -2,7 +2,7 @@
 
 RSpec.describe Cheapseal::KubeDriver do
   let(:kube_driver) do
-    Cheapseal::KubeDriver.new(src_namespace: 'src_ns', namespace: 'new_ns', logger: Logger.new('/dev/null'))
+    Cheapseal::KubeDriver.new(src_namespace: 'src_ns', dst_namespace: 'new_ns', logger: Logger.new('/dev/null'))
   end
 
   describe '#create_namespace' do

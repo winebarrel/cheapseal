@@ -4,33 +4,36 @@ module Cheapseal
   class KubeDriver
     KUBECTL = 'kubectl'
 
-    def initialize(src_namespace:, namespace:, logger:)
+    attr_reader :src_namespace
+    attr_reader :dst_namespace
+
+    def initialize(src_namespace:, dst_namespace:, logger:)
       @src_namespace = src_namespace
-      @namespace = namespace
+      @dst_namespace = dst_namespace
       @logger = logger
     end
 
     def create_namespace
-      kubectl :create, :namespace, @namespace
+      kubectl :create, :namespace, @dst_namespace
     end
 
     def delete_namespace
-      kubectl :delete, :namespace, @namespace, '--grace-period=0', '--force', raise_error: false
+      kubectl :delete, :namespace, @dst_namespace, '--grace-period=0', '--force', raise_error: false
     end
 
     def namespace_exist?
-      _out, _err, status = kubectl :get, :namespace, @namespace, raise_error: false
+      _out, _err, status = kubectl :get, :namespace, @dst_namespace, raise_error: false
       status.success?
     end
 
     def delete(resource:, name:)
-      kubectl '-n', @namespace, :delete, resource, name, raise_error: false
+      kubectl '-n', @dst_namespace, :delete, resource, name, raise_error: false
     end
 
     def copy(resource:, name:)
       out, _err, _status = kubectl '-n', @src_namespace, :get, resource, name, '-o', :json
       out = JSON.parse(out, symbolize_names: true)
-      out.fetch(:metadata)[:namespace] = @namespace
+      out.fetch(:metadata)[:namespace] = @dst_namespace
       out = yield(out) if block_given?
       kubectl :apply, '-f', '-', stdin_data: JSON.dump(out)
     end

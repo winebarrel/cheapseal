@@ -7,24 +7,45 @@ RSpec.describe Cheapseal::CLI do
 
   describe '#create' do
     specify do
-      expect_any_instance_of(Cheapseal::Staging).to receive(:create).with(
+      allow(cli).to receive(:options).and_return(
+        src: 'staging',
         branch: 'develop/my_branch-1.1',
-        number: '123',
-        image: 'nginx:master'
+        number: 123,
+        image: 'nginx:master',
+        service: %w[app front],
+        copy: %w[deploy/mysql deploy/redis]
       )
-
-      cli.create('develop/my_branch-1.1', '123', 'nginx:master')
+      expect_any_instance_of(Cheapseal::Staging).to receive(:create).with(
+        image: 'nginx:master',
+        service: %w[app front],
+        copy: %w[deploy/mysql deploy/redis]
+      )
+      cli.create
     end
   end
 
   describe '#delete' do
     specify do
-      expect_any_instance_of(Cheapseal::Staging).to receive(:delete).with(
+      allow(cli).to receive(:options).and_return(
+        src: 'staging',
         branch: 'develop/my_branch-1.1',
-        number: '123'
+        number: 123
       )
+      expect_any_instance_of(Cheapseal::Staging).to receive(:delete)
+      cli.delete
+    end
+  end
 
-      cli.delete('develop/my_branch-1.1', '123')
+  describe '#namespace' do
+    specify do
+      allow(cli).to receive(:options).and_return(
+        branch: 'develop/my_branch-1.1',
+        number: 123
+      )
+      expect(Cheapseal::Sanitizer).to receive(:branch_to_kube_ns)
+        .with(branch: 'develop/my_branch-1.1', number: 123).and_return('develop-my-branch-1-1-123')
+      expect($stdout).to receive(:puts).with('develop-my-branch-1-1-123')
+      cli.namespace
     end
   end
 end
